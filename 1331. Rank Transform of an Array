@@ -1,0 +1,33 @@
+class Solution {
+    public int[] arrayRankTransform(int[] arr) {
+        int n = arr.length;
+
+        Map<Integer, List<Integer>> mp = new HashMap<>();
+
+        for(int i=0;i<n;i++) {
+            if(!mp.containsKey(arr[i])) {
+                mp.put(arr[i] , new ArrayList<>());
+            }
+
+            mp.get(arr[i]).add(i);
+        }
+
+        int[] sorted = arr.clone();
+        Arrays.sort(sorted);
+        
+        int[] rank = new int[n];
+        int rankVal = 1;
+        
+        for(int i=0;i<n;i++) {
+            if(i > 0 && sorted[i] == sorted[i-1]) continue;
+
+            List<Integer> list = mp.get(sorted[i]);
+
+            for(int idx : list) {
+                rank[idx] = rankVal;
+            }
+            rankVal++;
+        }
+        return rank;
+    }
+}
