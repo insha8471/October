@@ -1,0 +1,38 @@
+class Solution {
+    public int smallestChair(int[][] times, int targetFriend) {
+        int n = times.length;
+        PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>((a,b) -> a.getKey()-b.getKey());
+        PriorityQueue<Integer> available = new PriorityQueue<>();
+
+        int target = times[targetFriend][0];
+
+        Arrays.sort(times, (a,b) -> a[0]-b[0]);
+        int chair = 0;
+
+
+        for(int i=0;i<n;i++) {
+            int arrival = times[i][0];
+            int depart = times[i][1];
+
+            while(!pq.isEmpty() && pq.peek().getKey() <= arrival){
+                available.add(pq.peek().getValue());
+                pq.poll();
+            }
+
+            if(available.isEmpty()) {
+                pq.add(new Pair<>(depart, chair));
+
+                if(arrival == target) {
+                    return chair;
+                }
+                chair++;
+            }else{
+                int leastAvailable = available.poll();
+
+                if(arrival == target) return leastAvailable;
+                pq.add(new Pair<>(depart, leastAvailable));
+            }
+        }
+        return -1;
+    }
+}
