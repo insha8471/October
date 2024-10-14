@@ -1,0 +1,23 @@
+class Solution {
+    public long maxKelements(int[] nums, int k) {
+        long score = 0;
+
+        int[] arr = nums.clone();
+        PriorityQueue<Pair<Integer, Integer>> pq = new PriorityQueue<>((a,b) -> b.getKey()-a.getKey());
+
+        for(int i=0;i<nums.length;i++) {
+            pq.add(new Pair<>(nums[i],i));
+        }
+
+        for(int j=0;j<k;j++) {
+            
+            Pair<Integer, Integer> top = pq.poll();
+            int maxNum = top.getKey();
+            int maxIdx = top.getValue();
+
+            score += maxNum;
+            pq.add(new Pair<>((int)Math.ceil((double)maxNum/3), maxIdx));
+        }
+        return score;
+    }
+}
